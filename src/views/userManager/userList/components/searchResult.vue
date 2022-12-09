@@ -39,10 +39,11 @@
         <el-table-column label="操作" width="200">
             <template #default="scope">
                 <el-button type="primary" size="small" @click.stop="deleteItem(scope.row.id)">删除</el-button>
-                <el-button type="primary" size="small" @click.stop="editorItem(scope.row.id)">编辑</el-button>
+                <el-button type="primary" size="small" @click.stop="editData(scope.row.id)">编辑</el-button>
             </template>
         </el-table-column>
     </el-table>
+    
     <div class="pagination">
         <el-pagination :current-page="currentPage" :page-size="pageSize" :page-sizes="[5, 10, 50, 100]" :small="small"
             :disabled="disabled" :background="background" layout="total, sizes, prev, pager, next, jumper"
@@ -86,6 +87,8 @@ interface Props {
     currentPage: any,
     changePage: Function,
     changeSize: Function,
+    editData: Function,
+    currentDateFormat: Function
 };
 defineProps<Props>();
 let dialogTableVisible = ref(false);
@@ -144,7 +147,7 @@ const deleteItem = (id: any) => {
         })
 }
 const editorItem = (id: any) => {
-    console.log("editor" + id);
+    
 }
 </script>
 

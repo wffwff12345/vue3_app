@@ -1,7 +1,10 @@
 <template>
     <div class="search">
-        <el-input v-model="name" placeholder="请输入用户名" :prefix-icon="Search" @change="changeParam(name)" @input="changeParam(name)"
-            @clear="clear" clearable/>
+        <el-input v-model="name" placeholder="请输入用户名" :prefix-icon="Search" @change="changeParam(name)"
+            @input="changeParam(name)" @clear="clear" clearable />
+        <div class="button">
+            <el-button type="primary" size="small" @click.stop="addData">新增用户</el-button>
+        </div>
     </div>
 </template>
 
@@ -11,7 +14,8 @@ import { Search } from '@element-plus/icons-vue'
 
 
 interface Props {
-    changeParam: Function
+    changeParam: Function,
+    addData: Function
 }
 defineProps<Props>()
 let name = ref("")
@@ -22,8 +26,13 @@ const clear = () => {
 
 <style lang="scss" scoped>
 .search {
-    width: 200px;
+    display: flex;
+    width: 600px;
     margin-left: 5px;
     margin-bottom: 20px;
+}
+
+.button{
+    margin-left: 200px;
 }
 </style>
