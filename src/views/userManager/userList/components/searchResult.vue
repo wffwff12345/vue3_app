@@ -39,7 +39,7 @@
         <el-table-column label="操作" width="200">
             <template #default="scope">
                 <el-button type="primary" size="small" @click.stop="deleteItem(scope.row.id)">删除</el-button>
-                <el-button type="primary" size="small" @click.stop="editData(scope.row.id)">编辑</el-button>
+                <el-button type="primary" size="small" @click.stop="editData(scope.row)">编辑</el-button>
             </template>
         </el-table-column>
     </el-table>

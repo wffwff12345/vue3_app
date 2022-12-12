@@ -3,3 +3,4 @@ export const ADMINUSR_LOGIN = "/admin/login"
 
 // user管理
 export const USERLIST="/user/getusers"
+export const EDITORUSER ="/user/put"

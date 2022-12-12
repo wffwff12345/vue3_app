@@ -1,6 +1,6 @@
 <template>
     <div class="userWrapper">
-        <editor ref="editorRef" :currentDateFormat="currentDateFormat"/>
+        <editor ref="editorRef" :currentDateFormat="currentDateFormat" :refreshData="getUser"/>
         <searchTool :changeParam="changeParam" :addData="addData"/>
         <searchResult ref="searchRef" :userList="userList" :total="total" :pageSize="Params.size"
             :currentPage="Params.page" :changePage="changePage" :changeSize="changeSize" :editData="editData" :currentDateFormat="currentDateFormat"/>
@@ -30,12 +30,13 @@ const changeParam = (name: any) => {
     getUser();
 }
 const getUser = async (): Promise<any> => {
+    console.log(Params)
     const result = await getUsers(Params);
     console.log(result);
     total.value = result.total;
     userList.splice(0, userList.length);
     userList.push(...result.data);
-    console.log(userList)
+    console.log(userList);
 }
 const changePage = (page: any) => {
     Params.page = page;

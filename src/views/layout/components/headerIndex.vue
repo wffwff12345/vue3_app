@@ -16,8 +16,8 @@ export default {
     name: "headerComponent",
     setup() {
         const router = useRouter();
-        let userName=ref("");
-        userName.value=getUser().name;
+        let userName=ref(getUser().name);
+        // userName.value=getUser().name;
         const logout = () => {
             ElMessageBox.confirm(
                 '你确定退出?',
