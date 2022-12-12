@@ -1,21 +1,21 @@
 <template>
     <div>
-        <el-dialog  :title="title" style="width:500px" v-model="dialogFormVisible">
+        <el-dialog :title="title" style="width:500px" v-model="dialogFormVisible">
             <el-form :model="form">
-                <el-form-item v-if="module==='editor'" label="用户ID" :label-width="formLabelWidth">
-                    <el-input v-model="form.data.id" autocomplete="off" :readonly="module==='editor'"  />
+                <el-form-item v-if="module === 'editor'" label="用户ID" :label-width="formLabelWidth">
+                    <el-input v-model="form.data.id" autocomplete="off" :readonly="module === 'editor'" />
                 </el-form-item>
                 <el-form-item label="用户名" :label-width="formLabelWidth">
-                    <el-input v-model="form.data.name" autocomplete="off" :readonly="module==='editor'" />
+                    <el-input v-model="form.data.name" autocomplete="off" :readonly="module === 'editor'" />
                 </el-form-item>
                 <el-form-item label="用户密码" :label-width="formLabelWidth">
-                    <el-input v-model="form.data.password" autocomplete="off"  />
+                    <el-input v-model="form.data.password" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="年龄" :label-width="formLabelWidth">
-                    <el-input v-model.number="form.data.age" autocomplete="off"  />
+                    <el-input v-model.number="form.data.age" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="邮箱" :label-width="formLabelWidth">
-                    <el-input v-model="form.data.email" autocomplete="off"  />
+                    <el-input v-model="form.data.email" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="用户电话" :label-width="formLabelWidth">
                     <el-input v-model="form.data.phone" autocomplete="off" />
@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
-import { editorUser} from '@/api/user';
+import { editorUser } from '@/api/user';
 import { ElMessage } from 'element-plus';
 const formLabelWidth = '140px';
 let module = ref();
@@ -56,13 +56,13 @@ let form = reactive({
     }
 });
 onMounted(() => {
-     
+
 })
 let title = ref("");
 const add = () => {
-    dialogFormVisible.value=true;
-    module.value="add";
-    title.value="新增用户";
+    dialogFormVisible.value = true;
+    module.value = "add";
+    title.value = "新增用户";
     form.data = {
         id: null,
         name: null,
@@ -74,17 +74,17 @@ const add = () => {
     };
 }
 const editor = (item: any) => {
-    dialogFormVisible.value=true;
-    module.value="editor";
-    title.value="编辑用户";
+    dialogFormVisible.value = true;
+    module.value = "editor";
+    title.value = "编辑用户";
     //form.data = item;
-    form.data=JSON.parse(JSON.stringify(item));
-    form.data.password=null;
+    form.data = JSON.parse(JSON.stringify(item));
+    form.data.password = null;
     console.log(form.data);
-    
+
 }
-const submit =async () => {
-    if(module.value==="add"){
+const submit = async () => {
+    if (module.value === "add") {
         console.log("add");
         console.log(form.data);
     } else {
@@ -94,12 +94,12 @@ const submit =async () => {
         console.log(result);
         if (result.code == 1001) {
             dialogFormVisible.value = false;
-            refreshData();
+            props.refreshData;
             ElMessage({
                 type: 'success',
                 message: '已成功编辑',
             })
-        }else{
+        } else {
             ElMessage({
                 type: 'error',
                 message: result.message,
@@ -116,14 +116,16 @@ interface item {
     phone: null,
     status: 0,
 }
-defineExpose({add, editor});
-defineProps<{
-    refreshData:Function
-}>();
+defineExpose({ add, editor });
+const props = defineProps<{
+    refreshData: Function
+}>(
+
+);
 </script>
 
 <style lang="scss" scoped>
-.dialog-footer{
+.dialog-footer {
     padding: 5px;
 }
 </style>
