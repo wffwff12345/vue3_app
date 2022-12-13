@@ -1,5 +1,5 @@
 <template>
-    <el-table :data="userList" style="width: 100%" @row-click="click">
+    <el-table :data="userList" style="width: 100%" @row-click="view">
         <el-table-column label="用户ID" width="150">
             <template #default="scope">
                 <span>{{ scope.row.id }}</span>
@@ -43,7 +43,6 @@
             </template>
         </el-table-column>
     </el-table>
-    
     <div class="pagination">
         <el-pagination :current-page="currentPage" :page-size="pageSize" :page-sizes="[5, 10, 50, 100]" :small="small"
             :disabled="disabled" :background="background" layout="total, sizes, prev, pager, next, jumper"
@@ -88,9 +87,10 @@ interface Props {
     changePage: Function,
     changeSize: Function,
     editData: Function,
+    viewData: Function,
     currentDateFormat: Function
 };
-defineProps<Props>();
+const props = defineProps<Props>();
 let dialogTableVisible = ref(false);
 let form = reactive({
     data: {
@@ -109,16 +109,8 @@ let background = ref(false);
 const formLabelWidth = '140px'
 const click = (row: any) => {
     form.data = row;
-    form.data.date = currentDateFormat(form.data.date);
     dialogTableVisible.value = true;
-};
-const currentDateFormat = (date: any, format: string = 'yyyy-mm-dd'): any => {
-    let dateTime = new Date(date);
-    const pad = (n: number): string => (n < 10 ? `0${n}` : n.toString());
-    return format
-        .replace('yyyy', pad(dateTime.getFullYear()))
-        .replace('mm', pad(dateTime.getMonth() + 1))
-        .replace('dd', pad(dateTime.getDate()))
+    form.data.date = props.currentDateFormat(form.data.date);
 };
 const deleteItem = (id: any) => {
     ElMessageBox.confirm(
@@ -146,13 +138,15 @@ const deleteItem = (id: any) => {
             })
         })
 }
-const editorItem = (id: any) => {
-    
+const view = (row: any) => {
+    props.viewData(row);
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.pagination{
+    margin-top: 20px;
+}
 </style>
 
 

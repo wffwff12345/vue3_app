@@ -1,9 +1,9 @@
 <template>
     <div class="userWrapper">
-        <editor ref="editorRef" :currentDateFormat="currentDateFormat" :refreshData="getUser"/>
+        <editorUser ref="editorRef" :currentDateFormat="currentDateFormat" :refreshData="getUser"/>
         <searchTool :changeParam="changeParam" :addData="addData"/>
-        <searchResult ref="searchRef" :userList="userList" :total="total" :pageSize="Params.size"
-            :currentPage="Params.page" :changePage="changePage" :changeSize="changeSize" :editData="editData" :currentDateFormat="currentDateFormat"/>
+        <searchResult ref="searchRef" :userList="userList" :total="total" :pageSize="Params.size" 
+            :currentPage="Params.page" :changePage="changePage" :changeSize="changeSize" :editData="editData" :viewData="viewData" :currentDateFormat="currentDateFormat"/>
     </div>
 </template>
 
@@ -11,7 +11,7 @@
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import searchResult from './components/searchResult.vue'
 import searchTool from './components/searchTool.vue'
-import editor from './components/editor.vue'
+import editorUser from './components/editorUser.vue'
 import { getUsers } from '@/api/user'
 let searchRef = ref();
 let Params = reactive({
@@ -50,10 +50,15 @@ const deleteUser = (id: any) => {
     console.log(id)
 }
 const editData = (item: any) => {
+    console.log(item);
     editorRef.value.editor(item);
 }
 const addData = () => {
     editorRef.value.add();
+}
+const viewData =(item: any) => {
+    console.log(item);
+    editorRef.value.view(item);
 }
 const currentDateFormat = (date: any, format: string = 'yyyy-mm-dd'): any => {
     let dateTime = new Date(date);
@@ -65,6 +70,8 @@ const currentDateFormat = (date: any, format: string = 'yyyy-mm-dd'): any => {
 };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.userWrapper{
+    height: 100%;
+}
 </style>

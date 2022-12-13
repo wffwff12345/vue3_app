@@ -1,35 +1,38 @@
 <template>
     <div>
-        <el-dialog :title="title" style="width:500px" v-model="dialogFormVisible">
+        <el-dialog :title="viewModule ? '用户详情' : editorModule ? '编辑用户' : '新增用户' " style="width:500px" v-model="dialogFormVisible">
             <el-form :model="form">
-                <el-form-item v-if="module === 'editor'" label="用户ID" :label-width="formLabelWidth">
-                    <el-input v-model="form.data.id" autocomplete="off" :readonly="module === 'editor'" />
+                <el-form-item v-if="editorModule||viewModule" label="用户ID" :label-width="formLabelWidth">
+                    <el-input v-model="form.data.id" autocomplete="off" :readonly="editorModule||viewModule" />
                 </el-form-item>
                 <el-form-item label="用户名" :label-width="formLabelWidth">
-                    <el-input v-model="form.data.name" autocomplete="off" :readonly="module === 'editor'" />
+                    <el-input v-model="form.data.name" autocomplete="off" :readonly="editorModule||viewModule" />
                 </el-form-item>
-                <el-form-item label="用户密码" :label-width="formLabelWidth">
+                <el-form-item v-if="!viewModule" label="用户密码" :label-width="formLabelWidth">
                     <el-input v-model="form.data.password" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="年龄" :label-width="formLabelWidth">
-                    <el-input v-model.number="form.data.age" autocomplete="off" />
+                    <el-input v-model.number="form.data.age" autocomplete="off" :readonly="viewModule" />
+                </el-form-item>
+                <el-form-item v-if="viewModule" label="注册时间" :label-width="formLabelWidth">
+                    <el-input v-model="form.data.date" autocomplete="off" readonly />
                 </el-form-item>
                 <el-form-item label="邮箱" :label-width="formLabelWidth">
-                    <el-input v-model="form.data.email" autocomplete="off" />
+                    <el-input v-model="form.data.email" autocomplete="off" :readonly="viewModule"  />
                 </el-form-item>
                 <el-form-item label="用户电话" :label-width="formLabelWidth">
-                    <el-input v-model="form.data.phone" autocomplete="off" />
+                    <el-input v-model="form.data.phone" autocomplete="off" :readonly="viewModule" />
                 </el-form-item>
                 <el-form-item label="用户授权状态" :label-width="formLabelWidth">
                     <div class="mb-2 flex items-center text-sm">
-                        <el-radio-group v-model="form.data.status" class="ml-4">
+                        <el-radio-group v-model="form.data.status" class="ml-4" :disabled="viewModule" >
                             <el-radio :label='0' size="large">不授权</el-radio>
                             <el-radio :label='1' size="large">授权</el-radio>
                         </el-radio-group>
                     </div>
                 </el-form-item>
             </el-form>
-            <div class="dialog-footer">
+            <div class="dialog-footer" v-if="!viewModule">
                 <el-button type="warning" @click="dialogFormVisible = false">取消</el-button>
                 <el-button type="success" @click="submit">保存</el-button>
             </div>
@@ -42,7 +45,8 @@ import { onMounted, reactive, ref } from 'vue';
 import { editorUser } from '@/api/user';
 import { ElMessage } from 'element-plus';
 const formLabelWidth = '140px';
-let module = ref();
+let editorModule = ref(true);
+let viewModule = ref(false);
 let dialogFormVisible = ref(false);
 let form = reactive({
     data: {
@@ -53,6 +57,7 @@ let form = reactive({
         email: null,
         phone: null,
         status: 0,
+        date: null,
     }
 });
 onMounted(() => {
@@ -61,8 +66,7 @@ onMounted(() => {
 let title = ref("");
 const add = () => {
     dialogFormVisible.value = true;
-    module.value = "add";
-    title.value = "新增用户";
+    editorModule.value = false;
     form.data = {
         id: null,
         name: null,
@@ -71,20 +75,24 @@ const add = () => {
         email: null,
         phone: null,
         status: 0,
+        date :null
     };
 }
 const editor = (item: any) => {
     dialogFormVisible.value = true;
-    module.value = "editor";
-    title.value = "编辑用户";
-    //form.data = item;
+    editorModule.value = true;
     form.data = JSON.parse(JSON.stringify(item));
     form.data.password = null;
-    console.log(form.data);
-
 }
+const view = (item: any) => {
+    dialogFormVisible.value = true;
+    viewModule.value = true;
+    form.data = item;
+    form.data.date = props.currentDateFormat(form.data.date);
+}
+
 const submit = async () => {
-    if (module.value === "add") {
+    if (!editorModule.value) {
         console.log("add");
         console.log(form.data);
     } else {
@@ -94,10 +102,11 @@ const submit = async () => {
         console.log(result);
         if (result.code == 1001) {
             dialogFormVisible.value = false;
-            props.refreshData;
+            props.refreshData();
             ElMessage({
                 type: 'success',
                 message: '已成功编辑',
+                duration:1000
             })
         } else {
             ElMessage({
@@ -116,8 +125,9 @@ interface item {
     phone: null,
     status: 0,
 }
-defineExpose({ add, editor });
+defineExpose({ add, editor,view });
 const props = defineProps<{
+    currentDateFormat: Function,
     refreshData: Function
 }>(
 

@@ -8,19 +8,12 @@
         </el-menu-item>
     </div>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent } from 'vue'
-export default defineComponent({
-    props: {
-        item: {
-            type: Object,
-            required: true
-        }
-    },
-    setup() {
-        return {}
-    }
-})
+defineProps<{
+    item:any
+}>();
+
 </script>
 
 <style scoped>

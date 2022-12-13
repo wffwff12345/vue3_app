@@ -7,48 +7,39 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue'
 import { getUser, clearUser } from '@/utils/store'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router';
-export default {
-    name: "headerComponent",
-    setup() {
-        const router = useRouter();
-        let userName=ref(getUser().name);
-        // userName.value=getUser().name;
-        const logout = () => {
-            ElMessageBox.confirm(
-                '你确定退出?',
-                '退出登录',
-                {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning',
-                }
-            ).then(() => {
-                clearUser();
-                router.replace({ path: '/login' })
-                ElMessage({
-                    type: 'success',
-                    message: '已退出',
-                    duration:1000
-                })
-            }).catch(() => {
-                ElMessage({
-                    type: 'info',
-                    message: '取消退出',
-                    duration:1000
-                })
-            })
-        };
-        return {
-            userName,
-            logout
+const router = useRouter();
+let userName = ref(getUser().name);
+// userName.value=getUser().name;
+const logout = () => {
+    ElMessageBox.confirm(
+        '你确定退出?',
+        '退出登录',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
         }
-    }
-}
+    ).then(() => {
+        clearUser();
+        router.replace({ path: '/login' })
+        ElMessage({
+            type: 'success',
+            message: '已退出',
+            duration: 1000
+        })
+    }).catch(() => {
+        ElMessage({
+            type: 'info',
+            message: '取消退出',
+            duration: 1000
+        })
+    })
+};
 </script>
 
 <style lang="scss" scoped>
