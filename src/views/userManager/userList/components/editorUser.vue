@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog :title="viewModule ? '用户详情' : editorModule ? '编辑用户' : '新增用户' " style="width:500px" v-model="dialogFormVisible">
+        <el-dialog :title="viewModule ? '用户详情' : editorModule ? '编辑用户' : '新增用户' " style="width:500px" v-model="dialogFormVisible" :before-close="handleClose">
             <el-form :model="form">
                 <el-form-item v-if="editorModule||viewModule" label="用户ID" :label-width="formLabelWidth">
                     <el-input v-model="form.data.id" autocomplete="off" :readonly="editorModule||viewModule" />
@@ -114,6 +114,12 @@ const submit = async () => {
                 message: result.message,
             })
         }
+    }
+}
+const handleClose = ()=>{
+    dialogFormVisible.value = false;
+    if(viewModule){
+        viewModule.value=!viewModule.value;
     }
 }
 interface item {
