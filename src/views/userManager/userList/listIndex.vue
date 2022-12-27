@@ -20,7 +20,7 @@ let Params = reactive({
     name: '',
 })
 let total = ref(0)
-let userList: any = reactive([]);
+let userList: any = ref([]);
 let editorRef = ref();
 onMounted(async() => {
     getUser();
@@ -34,8 +34,9 @@ const getUser = async (): Promise<any> => {
     const result = await getUsers(Params);
     console.log(result);
     total.value = result.total;
-    userList.splice(0, userList.length);
-    userList.push(...result.data);
+    //userList.splice(0, userList.length);
+    //userList.push(...result.data);
+    userList.value = result.data;
     console.log(userList);
 }
 const changePage = (page: any) => {
